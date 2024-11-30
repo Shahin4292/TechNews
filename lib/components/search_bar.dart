@@ -46,6 +46,7 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
           ),
         ),
         InkWell(
+          borderRadius: BorderRadius.circular(50),
           onTap: () {
             FocusScope.of(context).unfocus();
             fetchNews();
