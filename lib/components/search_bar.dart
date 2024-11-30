@@ -4,17 +4,17 @@ import 'package:tech_newz/utils/colors.dart';
 
 import '../backend/fetch_news.dart';
 
-class SearchBar extends StatefulWidget {
-  const SearchBar({super.key});
+class SearchBarWidget extends StatefulWidget {
+  const SearchBarWidget({super.key});
 
   static TextEditingController searchController =
       TextEditingController(text: '');
 
   @override
-  _SearchBarState createState() => _SearchBarState();
+  _SearchBarWidgetState createState() => _SearchBarWidgetState();
 }
 
-class _SearchBarState extends State<SearchBar> {
+class _SearchBarWidgetState extends State<SearchBarWidget> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -35,7 +35,7 @@ class _SearchBarState extends State<SearchBar> {
                 const SizedBox(width: 10),
                 Expanded(
                     child: TextField(
-                  controller: SearchBar.searchController,
+                  controller: SearchBarWidget.searchController,
                   decoration: InputDecoration(
                       hintText: 'Search a Keyword or a Phrase',
                       hintStyle: GoogleFonts.lato(),
