@@ -1,10 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:tech_newz/components/components.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 import '../utils/text.dart';
+import 'components.dart';
 
 void showMyBottomSheet(
     BuildContext context, String title, String description, imageUrl, url) {
@@ -16,7 +17,12 @@ void showMyBottomSheet(
       elevation: 20,
       context: context,
       builder: (context) {
-        return Container();
+        return MyBottomSheetLayout(
+          url: url,
+          imageUrl: imageUrl,
+          title: title,
+          description: description,
+        ); // returns your BottomSheet widget
       });
 }
 
@@ -28,6 +34,8 @@ _launchURL(String url) async {
   }
 }
 
+//your bottom sheet widget class
+//you can put your things here, like buttons, callbacks and layout
 class MyBottomSheetLayout extends StatelessWidget {
   final String title, description, imageUrl, url;
 

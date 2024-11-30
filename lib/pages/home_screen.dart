@@ -1,56 +1,72 @@
 import 'package:flutter/material.dart';
-import 'package:tech_newz/backend/fetch_news.dart';
+import 'package:tech_newz/components/app_bar.dart';
+
+import '../backend/fetch_news.dart';
+import '../components/news_box.dart';
+import '../utils/colors.dart';
+import '../utils/constant.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List news = [];
-  // late Future<List> news;
+  late Future<List> news;
 
   @override
   void initState() {
-    fetchNews();
     super.initState();
-    // news = fetchNews();
+    news = fetchNews();
   }
 
   @override
   Widget build(BuildContext context) {
+    var w = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
+        backgroundColor: AppColors.black,
+        appBar: const AppBarWidget(),
+        body: Column(
+          children: [
+            const SearchBar(),
+            Expanded(
               child: Container(
-            child: FutureBuilder<List>(
-              future: fetchNews(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      return Card(
-                        child: Column(
-                          children: [
-                            Text(snapshot.data![index]['title']),
-                            Text(snapshot.data![index]['description']),
-                            Image(image: NetworkImage(snapshot.data![index]['urlToImage']))
-                          ],
-                        )
-                      );
+                  width: w,
+                  child: FutureBuilder<List>(
+                    future: fetchNews(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              return NewsBox(
+                                url: snapshot.data![index]['url'],
+                                imageUrl:
+                                    snapshot.data![index]['urlToImage'] != null
+                                        ? snapshot.data![index]['urlToImage']
+                                        : Constants.imageUrl,
+                                title: snapshot.data![index]['title'],
+                                time: snapshot.data![index]['publishedAt'],
+                                description: snapshot.data![index]
+                                        ['description']
+                                    .toString(),
+                              );
+                            });
+                      } else if (snapshot.hasError) {
+                        return Text("${snapshot.error}");
+                      }
+
+                      // By default, show a loading spinner.
+                      return Center(
+                          child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                      ));
                     },
-                  );
-                }
-                return Center();
-              },
+                  )),
             ),
-          ))
-        ],
-      ),
-    );
+          ],
+        ));
   }
 }
